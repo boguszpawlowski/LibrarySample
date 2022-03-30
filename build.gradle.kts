@@ -82,16 +82,16 @@ tasks {
 
   withType(GenerateChangelogTask::class) {
     previousRevision = project.ext["shipkit-auto-version.previous-tag"] as String?
-    githubToken = java.lang.System.getenv("GITHUB_TOKEN")
-    repository = "boguszpawlowski/chassis"
+    githubToken = System.getenv("GITHUB_TOKEN")
+    repository = "boguszpawlowski/librarysample"
   }
 
   withType(GithubReleaseTask::class) {
     dependsOn(named("generateChangelog"))
-    repository = "boguszpawlowski/chassis"
+    repository = "boguszpawlowski/librarysample"
     changelog = named("generateChangelog").get().outputs.files.singleFile
-    githubToken = java.lang.System.getenv("GITHUB_TOKEN")
-    newTagRevision = java.lang.System.getenv("GITHUB_SHA")
+    githubToken = System.getenv("GITHUB_TOKEN")
+    newTagRevision = System.getenv("GITHUB_SHA")
   }
 }
 
