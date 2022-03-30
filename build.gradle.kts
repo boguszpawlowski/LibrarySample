@@ -1,11 +1,16 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.shipkit.changelog.GenerateChangelogTask
+import org.shipkit.github.release.GithubReleaseTask
 
 plugins {
   id(DetektLib.PluginId) version DetektLib.Version
   id(GradleVersions.PluginId) version GradleVersions.Version
   id(GrGit.PluginId) version GrGit.Version
+  id(Shipkit.AutoVersion.PluginId) version Shipkit.AutoVersion.Version
+  id(Shipkit.Changelog.PluginId) version Shipkit.Changelog.Version
+  id(Shipkit.GithubRelease.PluginId) version Shipkit.GithubRelease.Version
 }
 
 buildscript {
@@ -13,15 +18,14 @@ buildscript {
     google()
     mavenCentral()
     gradlePluginPortal()
-    jcenter()
   }
   dependencies {
     classpath(Android.GradlePlugin)
     classpath(Kotlin.GradlePlugin)
-    classpath(SqlDelight.Plugin)
+    classpath(Kotlin.DokkaGradlePlugin)
     classpath(DetektLib.Plugin)
     classpath(GradleVersions.Plugin)
-    classpath(Firebase.CrashlyticsPlugin)
+    classpath(MavenPublish.GradlePlugin)
   }
 }
 
@@ -29,29 +33,6 @@ allprojects {
   repositories {
     mavenCentral()
     google()
-    maven("https://jitpack.io")
-    jcenter()
-  }
-
-  tasks.withType<JavaCompile> {
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = "1.8"
-      languageVersion = "1.5"
-      apiVersion = "1.5"
-      freeCompilerArgs = freeCompilerArgs + listOf(
-        "-progressive",
-        "-Xopt-in=kotlin.RequiresOptIn",
-        "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-Xskip-prerelease-check",
-        "-Xuse-experimental=kotlin.contracts.ExperimentalContracts",
-        "-Xjvm-enable-preview"
-      )
-    }
   }
 
   tasks.withType<Test> {
@@ -59,6 +40,10 @@ allprojects {
     testLogging {
       events("passed", "skipped", "failed")
     }
+  }
+
+  tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
   }
 }
 
@@ -83,14 +68,30 @@ tasks.withType<Detekt> {
   }
 }
 
-tasks.register("check") {
-  group = "Verification"
-  description = "Allows to attach Detekt to the root project."
-}
+tasks {
+  register("check") {
+    group = "Verification"
+    description = "Allows to attach Detekt to the root project."
+  }
 
-tasks.withType<DependencyUpdatesTask> {
-  rejectVersionIf {
-    isNonStable(candidate.version) && !isNonStable(currentVersion)
+  withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+      isNonStable(candidate.version) && !isNonStable(currentVersion)
+    }
+  }
+
+  withType(GenerateChangelogTask::class) {
+    previousRevision = project.ext["shipkit-auto-version.previous-tag"] as String?
+    githubToken = java.lang.System.getenv("GITHUB_TOKEN")
+    repository = "boguszpawlowski/chassis"
+  }
+
+  withType(GithubReleaseTask::class) {
+    dependsOn(named("generateChangelog"))
+    repository = "boguszpawlowski/chassis"
+    changelog = named("generateChangelog").get().outputs.files.singleFile
+    githubToken = java.lang.System.getenv("GITHUB_TOKEN")
+    newTagRevision = java.lang.System.getenv("GITHUB_SHA")
   }
 }
 

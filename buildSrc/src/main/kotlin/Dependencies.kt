@@ -1,26 +1,7 @@
 @file:Suppress("ObjectPropertyNaming", "ClassNaming", "UnderscoresInNumericLiterals")
-object App {
-  private const val versionMajor = 0
-  private const val versionMinor = 0
-  private const val versionPatch = 1
-  private val versionClassifier: String? = null
-  private const val isSnapshot = true
-
-  private fun generateVersionName(): String {
-    val versionName = "$versionMajor.$versionMinor.$versionPatch"
-    val classifier = if (versionClassifier == null && isSnapshot) {
-      "-SNAPSHOT"
-    } else versionClassifier ?: ""
-
-    return "$versionName$classifier"
-  }
-
-  val VersionName = generateVersionName()
-}
-
 object MavenPublish {
   const val PluginId = "com.vanniktech.maven.publish"
-  const val GradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
+  const val GradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 }
 
 object AndroidSdk {
@@ -34,12 +15,14 @@ object Kotlin {
   const val Version = "1.5.31"
 
   const val GradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$Version"
-  const val DokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.32"
+  const val DokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:$Version"
 
   const val StdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$Version"
   const val SafeArgsPlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.0"
 
   const val AndroidPluginId = "android"
+  const val MultiplatformPluginId = "multiplatform"
+  const val MultiplatformPluginIdVersion = "1.5.10"
   const val KaptPluginId = "kapt"
   const val SafeArgsPluginId = "androidx.navigation.safeargs.kotlin"
   const val JvmPluginId = "jvm"
@@ -73,33 +56,25 @@ object Coroutines {
   const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$Version"
 }
 
-object SqlDelight {
-  const val Version = "1.5.2"
+object Shipkit {
+  object AutoVersion {
+    const val Version = "1.1.19"
 
-  const val PluginId = "com.squareup.sqldelight"
-  const val Plugin = "com.squareup.sqldelight:gradle-plugin:$Version"
+    const val PluginId = "org.shipkit.shipkit-auto-version"
+  }
 
-  const val AndroidDriver = "com.squareup.sqldelight:android-driver:$Version"
-  const val JdbcDriver = "org.xerial:sqlite-jdbc:3.34.0"
-  const val Driver = "com.squareup.sqldelight:sqlite-driver:$Version"
+  object Changelog {
+    const val Version = "1.1.15"
 
-  const val CoroutineExtensions = "com.squareup.sqldelight:coroutines-extensions:$Version"
+    const val PluginId = "org.shipkit.shipkit-changelog"
+  }
+
+  object GithubRelease {
+    const val Version = "1.1.15"
+
+    const val PluginId = "org.shipkit.shipkit-github-release"
+  }
 }
-
-object Retrofit {
-  const val Version = "2.9.0"
-
-  const val Core = "com.squareup.retrofit2:retrofit:$Version"
-  const val ConverterKotlinxSerialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
-}
-
-object KotlinXSerialization {
-  const val Version = "1.3.0"
-
-  const val Core = "org.jetbrains.kotlinx:kotlinx-serialization-core:$Version"
-  const val Json = "org.jetbrains.kotlinx:kotlinx-serialization-json:$Version"
-}
-
 object AndroidX {
   const val Version = "1.0.0"
   const val LifecycleVersion = "2.2.0"
@@ -108,10 +83,6 @@ object AndroidX {
   const val Activity = "androidx.activity:activity-ktx:1.3.1"
   const val ConstraintLayout = "androidx.constraintlayout:constraintlayout:2.1.1"
   const val ComposeActivity = "androidx.activity:activity-compose:1.3.0"
-  const val Lifecycle = "androidx.lifecycle:lifecycle-extensions:$LifecycleVersion"
-  const val LifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:$LifecycleVersion"
-  const val LifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$LifecycleVersion"
-  const val Startup = "androidx.startup:startup-runtime:1.1.0"
   const val ComposeLifecycle = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03"
 }
 
@@ -120,7 +91,7 @@ object Material {
 }
 
 object DetektLib {
-  const val Version = "1.18.1"
+  const val Version = "1.19.0"
 
   const val PluginId = "io.gitlab.arturbosch.detekt"
   const val Plugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$Version"
@@ -129,26 +100,15 @@ object DetektLib {
   const val Cli = "io.gitlab.arturbosch.detekt:detekt-cli:$Version"
 }
 
-object Koin {
-  const val Version = "2.2.2"
-
-  const val Core = "org.koin:koin-core:$Version"
-  const val Android = "org.koin:koin-android:$Version"
-  const val ViewModel = "org.koin:koin-androidx-viewmodel:$Version"
-  const val Compose = "org.koin:koin-androidx-compose:$Version"
-}
-
 object Timber {
   const val Version = "4.7.1"
   const val Core = "com.jakewharton.timber:timber:$Version"
 }
 
 object Compose {
-  const val Version = "1.0.4"
+  const val Version = "1.0.5"
   const val AccompanistVersion = "0.10.0"
 
-  const val Runtime = "androidx.compose.runtime:runtime:$Version"
-  const val Compiler = "androidx.compose.compiler:compiler:$Version"
   const val Foundation = "androidx.compose.foundation:foundation:$Version"
   const val FoundationLayout = "androidx.compose.foundation:foundation-layout:$Version"
   const val Material = "androidx.compose.material:material:$Version"
@@ -161,28 +121,13 @@ object Compose {
   const val JunitTesting = "androidx.compose.ui:ui-test-junit4:$Version"
 }
 
-object Firebase {
-  const val CrashlyticsPlugin = "com.google.firebase:firebase-crashlytics-gradle:2.7.1"
-  const val GoogleServicesPlugin = "com.google.gms:google-services:4.3.5"
-  const val AppDistributionPlugin = "com.google.firebase:firebase-appdistribution-gradle:1.3.1"
-
-  const val CrashlyticsPluginId = "com.google.firebase.crashlytics"
-  const val GoogleServicesPluginId = "com.google.gms.google-services"
-  const val AppDistributionPluginId = "com.google.firebase.appdistribution"
-
-  const val Bom = "com.google.firebase:firebase-bom:28.1.0"
-
-  const val Analytics = "com.google.firebase:firebase-analytics-ktx"
-  const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
-}
-
 object Debug {
   const val LeakCanary = "com.squareup.leakcanary:leakcanary-android:2.7"
   const val FoQA = "pl.droidsonroids.foqa:foqa:0.2.1"
 }
 
 object Kotest {
-  const val Version = "4.6.0"
+  const val Version = "5.0.3"
 
   const val RunnerJunit5 = "io.kotest:kotest-runner-junit5-jvm:$Version"
 
@@ -194,7 +139,7 @@ object JUnit {
 }
 
 object CoroutineTest {
-  const val Turbine = "app.cash.turbine:turbine:0.4.1"
+  const val Turbine = "app.cash.turbine:turbine:0.7.0"
 }
 
 object AndroidXTest {
