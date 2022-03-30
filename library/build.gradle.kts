@@ -1,9 +1,7 @@
 @file:Suppress("UnusedPrivateMember")
-import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
   kotlin(Kotlin.MultiplatformPluginId)
-  id(MavenPublish.PluginId)
 }
 
 kotlin {
@@ -32,12 +30,5 @@ kotlin {
       }
     }
     val jvmMain by getting
-  }
-}
-
-plugins.withId("com.vanniktech.maven.publish") {
-  mavenPublish {
-    sonatypeHost = SonatypeHost.S01
-    releaseSigningEnabled = true
   }
 }
