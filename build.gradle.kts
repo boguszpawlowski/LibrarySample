@@ -1,5 +1,4 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.vanniktech.maven.publish.SonatypeHost
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.shipkit.changelog.GenerateChangelogTask
@@ -9,7 +8,6 @@ plugins {
   id(DetektLib.PluginId) version DetektLib.Version
   id(GradleVersions.PluginId) version GradleVersions.Version
   id(GrGit.PluginId) version GrGit.Version
-  id(MavenPublish.PluginId) version MavenPublish.Version
   id(Shipkit.AutoVersion.PluginId) version Shipkit.AutoVersion.Version
   id(Shipkit.Changelog.PluginId) version Shipkit.Changelog.Version
   id(Shipkit.GithubRelease.PluginId) version Shipkit.GithubRelease.Version
@@ -49,15 +47,6 @@ allprojects {
   }
 }
 
-subprojects {
-  apply(plugin = MavenPublish.PluginId)
-  plugins.withId(MavenPublish.PluginId) {
-    mavenPublish {
-      sonatypeHost = SonatypeHost.S01
-    }
-  }
-}
-
 dependencies {
   detekt(DetektLib.Formatting)
   detekt(DetektLib.Cli)
@@ -80,7 +69,7 @@ tasks.withType<Detekt> {
 }
 
 tasks {
-  named("check") {
+  register("check") {
     group = "Verification"
     description = "Allows to attach Detekt to the root project."
   }
