@@ -2,6 +2,7 @@
 
 plugins {
   kotlin(Kotlin.MultiplatformPluginId)
+  id(MavenPublish.PluginId)
 }
 
 kotlin {
@@ -30,5 +31,11 @@ kotlin {
       }
     }
     val jvmMain by getting
+  }
+}
+
+plugins.withId(MavenPublish.PluginId) {
+  mavenPublish {
+    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
   }
 }
