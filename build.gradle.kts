@@ -1,5 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.plugin.statistics.ReportStatisticsToElasticSearch.url
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.shipkit.changelog.GenerateChangelogTask
 import org.shipkit.github.release.GithubReleaseTask
@@ -33,6 +34,7 @@ allprojects {
   repositories {
     mavenCentral()
     google()
+    maven { setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots") }
   }
 
   tasks.withType<Test> {

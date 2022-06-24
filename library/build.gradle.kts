@@ -28,6 +28,7 @@ kotlin {
       dependencies {
         implementation(Coroutines.Core)
         implementation(Kotlin.StdLib)
+        implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:0.4.3-SNAPSHOT")
       }
     }
     val jvmMain by getting
