@@ -33,6 +33,7 @@ allprojects {
   repositories {
     mavenCentral()
     google()
+    maven { setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots") }
   }
 
   tasks.withType<Test> {
