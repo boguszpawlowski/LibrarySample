@@ -1,16 +1,12 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.shipkit.changelog.GenerateChangelogTask
-import org.shipkit.github.release.GithubReleaseTask
 
 plugins {
   id(DetektLib.PluginId) version DetektLib.Version
   id(GradleVersions.PluginId) version GradleVersions.Version
   id(GrGit.PluginId) version GrGit.Version
-  id(Shipkit.AutoVersion.PluginId) version Shipkit.AutoVersion.Version
-  id(Shipkit.Changelog.PluginId) version Shipkit.Changelog.Version
-  id(Shipkit.GithubRelease.PluginId) version Shipkit.GithubRelease.Version
+  id(ShipkitAutoVersion.PluginId) version ShipkitAutoVersion.Version
 }
 
 buildscript {
@@ -79,20 +75,6 @@ tasks {
     rejectVersionIf {
       isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
-  }
-
-  withType(GenerateChangelogTask::class) {
-    previousRevision = project.ext["shipkit-auto-version.previous-tag"] as String?
-    githubToken = System.getenv("GITHUB_TOKEN")
-    repository = "boguszpawlowski/librarysample"
-  }
-
-  withType(GithubReleaseTask::class) {
-    dependsOn(named("generateChangelog"))
-    repository = "boguszpawlowski/librarysample"
-    changelog = named("generateChangelog").get().outputs.files.singleFile
-    githubToken = System.getenv("GITHUB_TOKEN")
-    newTagRevision = System.getenv("GITHUB_SHA")
   }
 }
 
