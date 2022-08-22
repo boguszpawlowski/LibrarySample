@@ -58,25 +58,12 @@ object Coroutines {
   const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$Version"
 }
 
-object Shipkit {
-  object AutoVersion {
-    const val Version = "1.1.19"
+object ShipkitAutoVersion {
+  const val Version = "1.1.19"
 
-    const val PluginId = "org.shipkit.shipkit-auto-version"
-  }
-
-  object Changelog {
-    const val Version = "1.1.15"
-
-    const val PluginId = "org.shipkit.shipkit-changelog"
-  }
-
-  object GithubRelease {
-    const val Version = "1.1.15"
-
-    const val PluginId = "org.shipkit.shipkit-github-release"
-  }
+  const val PluginId = "org.shipkit.shipkit-auto-version"
 }
+
 object AndroidX {
   const val Version = "1.0.0"
   const val LifecycleVersion = "2.2.0"
