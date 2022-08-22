@@ -43,10 +43,37 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
         run: ./gradlew closeAndReleaseRepository --no-daemon --no-parallel
 
-      - name: Github release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew githubRelease
+      - name: Stop Gradle
+        run: ./gradlew --stop
+  publish-changelog:
+    name: Publish Changelog
+    runs-on: ubuntu-latest
+    needs: [deploy-maven]
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: Create Changelog
+        id: create_changelog
+        uses: mikepenz/release-changelog-builder-action@v3.2.0
+        with:
+          configuration: "config/changelog_configuration.json"
+
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Github Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: ${{ env.RELEASE_VERSION }}
+          body: ${{steps.create_changelog.outputs.changelog}}
+          draft: true
+          prerelease: false
 
       - name: Stop Gradle
         run: ./gradlew --stop
